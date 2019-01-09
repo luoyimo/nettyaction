@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="WARN" monitorInterval="-1" shutdownHook="disable">
+    <properties>
+        <property name="LOG_HOME">${sys:user.dir}/log</property>
+        <property name="LOG_NAME">all</property>
+    </properties>
+    <appenders>
+        <!--这个输出控制台的配置 -->
+        <console name="Console" target="SYSTEM_OUT">
+            <!-- 只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!--输出日志的格式 -->
+            <!-- <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss-SSS}] [%p] [%t] %l - %m%n" /> -->
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss-SSS}] [%p] [%t] [%c][%M] - %m%n"/>
+        </console>
+        <!-- 这个会打印出所有的info及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月-日建立的文件夹下面并进行压缩，作为存档 -->
+        <RollingFile name="RollingFile" fileName="${LOG_HOME}/${LOG_NAME}.log"
+                     filePattern="${LOG_HOME}/${LOG_NAME}-%d{yyyyMMdd}-%i.log.gz">
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss-SSS}] [%p] [%t] %l - %m%n"/>
+            <DefaultRolloverStrategy max="30"/>
+            <Policies>
+                <!-- <OnStartupTriggeringPolicy /> -->
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+    </appenders>
+    <loggers>
+        <Root level="DEBUG" includeLocation="true">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="RollingFile"/>
+        </Root>
+    </loggers>
+</configuration>

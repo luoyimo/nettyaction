@@ -1,0 +1,33 @@
+syntax = "proto3";
+package com.netty.model.protobuf;
+
+import "google/protobuf/any.proto";
+
+option java_package = "com.netty.model.protobuf";
+option java_outer_classname="ServerCommand";
+
+
+enum MessageType {
+    LOGIN_REQ = 0;//登录请求
+    LOGIN_RESP = 1;//登录回复
+    HEARTBEAT = 2;//心跳检测,一般客户端需要5秒发送一次心跳到服务器端以维持在线状态
+  }
+  
+message  CommandRouterModel{
+	string message = 2;	//一般存储提示信息
+	string toClient = 3;//发送到什么终端
+	string fromServer = 4;//从什么服务器发来请求
+	string toServer = 5;//目标服务器  
+}
+
+message CommandModel{
+	MessageType messageType = 1;//发送的请求类型
+	google.protobuf.Any data = 2;//发送的数据，可以为任意类型
+	int32 result = 3;// 处理结果  10000表示成功  非10000表示失败
+	string message = 4;	//一般存储提示信息
+	string Client = 5;//请求的终端号
+	int64 serverTime = 6; //服务器时间
+	CommandRouterModel distributeData = 7;//服务器转发任务时的信息,普通发送不需要此参数
+}
+
+
