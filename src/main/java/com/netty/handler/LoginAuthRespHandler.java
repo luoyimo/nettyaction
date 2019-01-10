@@ -30,11 +30,12 @@ public class LoginAuthRespHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ServerCommand.CommandModel comm = (ServerCommand.CommandModel) msg;
         String remoteAddress = ctx.channel().remoteAddress().toString();
-        ServerCommand.CommandModel loginResp = null;
+        ServerCommand.CommandModel loginResp;
 
-        if ((msg instanceof ServerCommand.CommandModel) && comm.getMessageType() == ServerCommand.MessageType.LOGIN_REQ) {
+        if ((msg instanceof ServerCommand.CommandModel)
+                && Objects.equals(comm.getMessageType(), ServerCommand.MessageType.LOGIN_REQ)) {
             //参数校验
-            if (comm.getClientId() == null || comm.getClientId().isEmpty()) {
+            if (Objects.isNull(comm.getClientId()) || comm.getClientId().isEmpty()) {
                 loginResp = buildResponse(comm.getClientId(), RespCodeEnum.REQUIRE_CLIENTID);
                 ctx.writeAndFlush(loginResp);
                 return;
