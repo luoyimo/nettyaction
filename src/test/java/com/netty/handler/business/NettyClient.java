@@ -29,10 +29,10 @@ import static java.lang.Thread.sleep;
  * @Description: 服务器之间通信的客户端，用于服务器之间通信，多服务器之间转发
  * @Date Create In 15:55 2019/1/8 0008
  */
-public class DistributedServerClient {
+public class NettyClient {
 
 
-    private static final Logger logger = LoggerFactory.getLogger(DistributedServerClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(NettyClient.class);
 
     private ThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
 
@@ -45,12 +45,14 @@ public class DistributedServerClient {
     private EventLoopGroup group;
     private volatile boolean connected = false;
     private String hostPort;
+    private String clientId;
 
-    public DistributedServerClient(String address) {
+    public NettyClient(String address, String clientId) {
         hostPort = address;
         String[] hostPort = address.split(":");
         this.host = hostPort[0];
         this.port = Integer.parseInt(hostPort[1]);
+        this.clientId = clientId;
     }
 
     public Channel getChannel() {
@@ -77,13 +79,13 @@ public class DistributedServerClient {
                             //10s内没有获取到任何响应,超时中断,抛出异常
                             ch.pipeline().addLast(HandlerName.READTIMEOUT, new ReadTimeoutHandler(10));
                             //登录到服务器端
-                            ch.pipeline().addLast(HandlerName.LOGINAUTHREQ, new LoginAuthReqHandler("localhost"));
+                            ch.pipeline().addLast(HandlerName.LOGINAUTHREQ, new LoginAuthReqHandler(clientId));
                             //心跳检测
-                            heartBeatReqHandler = new HeartBeatServerReqHandler("localhost");
+                            heartBeatReqHandler = new HeartBeatServerReqHandler(clientId);
                             ch.pipeline().addLast(HandlerName.HEARTBEAT, heartBeatReqHandler);
 
                             //后面这段代码可以删除 用于测试
-                            ch.pipeline().addLast(ServerCommand.MessageType.SENDMESSAGE.name(), new SendMessageHandler("localhost"));
+                            ch.pipeline().addLast(ServerCommand.MessageType.SENDMESSAGE.name(), new SendMessageHandler(clientId));
 
                             channel = ch;
                         }

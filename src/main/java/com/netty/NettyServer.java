@@ -35,10 +35,11 @@ public class NettyServer {
 
     public static void main(String[] args) {
         String severAddress = PropertiesUtil.getProperty("server.local.address");
-        new NettyServer().bind(Integer.parseInt(severAddress.split(":")[1]));
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             RedisUtil.removeFromSet(RouterService.REMOTESERVERSETKEY, RouterService.serverHostPort);
         }));
+        new NettyServer().bind(Integer.parseInt(severAddress.split(":")[1]));
+
     }
 
 
