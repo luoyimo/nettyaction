@@ -26,8 +26,8 @@ public class HeartBeatServerReqHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ServerCommand.CommandModel comm = (ServerCommand.CommandModel) msg;
-        logger.debug("message content:{}", msg);
         if (Objects.equals(comm.getMessageType(), ServerCommand.MessageType.LOGIN_RESP)) {
+            logger.debug("message content:{}", msg);
             if (Objects.equals(comm.getResult(), RespCodeEnum.SUCCESS.getRespCode())) {
                 heartBeat = ctx.executor().scheduleAtFixedRate(new HeartBeatServerReqHandler.HeartBeatTask(ctx), 0,
                         2000, TimeUnit.MILLISECONDS);
@@ -51,7 +51,7 @@ public class HeartBeatServerReqHandler extends ChannelInboundHandlerAdapter {
             heartBeat.setMessageType(ServerCommand.MessageType.HEARTBEAT);
             heartBeat.setClientId(DistributedServerUtil.getServerAddress());
             ctx.writeAndFlush(heartBeat.build());
-            logger.debug("send heartBeat:{}", heartBeat);
+            logger.debug("send heartBeat:{}", heartBeat.build());
 
         }
     }

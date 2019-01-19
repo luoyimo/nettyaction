@@ -5,7 +5,7 @@ public class DistributeNettyClient {
     public static void main(String[] args) throws Exception {
 
 
-        new DistributedServerClient("127.0.0.1:8099").connect();
+        new DistributedServerClient("119.29.163.100:8099").connect();
 
     }
 }

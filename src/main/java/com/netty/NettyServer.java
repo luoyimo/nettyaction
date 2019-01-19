@@ -1,11 +1,13 @@
 package com.netty;
 
 import com.netty.context.HandlerName;
+import com.netty.distribute.RouterService;
 import com.netty.handler.HeartBeatRespHandler;
 import com.netty.handler.LoginAuthRespHandler;
 import com.netty.handler.business.MessageSendHandler;
 import com.netty.model.protobuf.ServerCommand;
 import com.netty.util.PropertiesUtil;
+import com.netty.util.RedisUtil;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -34,6 +36,9 @@ public class NettyServer {
     public static void main(String[] args) {
         String severAddress = PropertiesUtil.getProperty("server.local.address");
         new NettyServer().bind(Integer.parseInt(severAddress.split(":")[1]));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            RedisUtil.removeFromSet(RouterService.REMOTESERVERSETKEY, RouterService.serverHostPort);
+        }));
     }
 
 
