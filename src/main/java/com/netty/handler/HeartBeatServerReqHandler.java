@@ -56,7 +56,7 @@ public class HeartBeatServerReqHandler extends ChannelInboundHandlerAdapter {
         public void run() {
             ServerCommand.CommandModel.Builder heartBeat = ServerCommand.CommandModel.newBuilder();
             heartBeat.setMessageType(ServerCommand.MessageType.HEARTBEAT);
-            heartBeat.setClientId(DistributedServerUtil.getServerAddress());
+            heartBeat.setClientId(clinetId);
             ctx.writeAndFlush(heartBeat.build());
             logger.debug("send heartBeat:{}", heartBeat.build());
 
