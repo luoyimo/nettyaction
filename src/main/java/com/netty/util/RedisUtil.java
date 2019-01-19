@@ -7,7 +7,6 @@ import org.redisson.api.RSet;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 
@@ -21,10 +20,9 @@ public class RedisUtil {
     private static RedissonClient redisson;
 
     static {
-        Properties properties = PropertiesUtil.loadProperties();
-        String redis_address = properties.getProperty("redis.address");
-        String redis_pwd = properties.getProperty("redis.password");
-        Integer timeOut = Integer.parseInt(properties.getProperty("redis.timeout"));
+        String redis_address = PropertiesUtil.getProperty("redis.address");
+        String redis_pwd = PropertiesUtil.getProperty("redis.password");
+        Integer timeOut = Integer.parseInt(PropertiesUtil.getProperty("redis.timeout"));
         Config config = new Config();
         config.useSingleServer().setAddress(redis_address);
         config.useSingleServer().setPassword(redis_pwd);

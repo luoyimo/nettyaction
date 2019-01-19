@@ -16,7 +16,7 @@ public interface RouterService {
     String CLIENTPREFIX = "s:clientId:%s";
 
 
-    String serverHostPort = PropertiesUtil.loadProperties().getProperty("server.local.address");
+    String serverHostPort = PropertiesUtil.getProperty("server.local.address");
 
 
     /**

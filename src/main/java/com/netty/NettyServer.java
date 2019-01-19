@@ -5,6 +5,7 @@ import com.netty.handler.HeartBeatRespHandler;
 import com.netty.handler.LoginAuthRespHandler;
 import com.netty.handler.business.MessageSendHandler;
 import com.netty.model.protobuf.ServerCommand;
+import com.netty.util.PropertiesUtil;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -31,7 +32,8 @@ public class NettyServer {
     private static final Logger logger = LoggerFactory.getLogger(NettyServer.class);
 
     public static void main(String[] args) {
-        new NettyServer().bind(8999);
+        String severAddress = PropertiesUtil.getProperty("server.local.address");
+        new NettyServer().bind(Integer.parseInt(severAddress.split(":")[1]));
     }
 
 

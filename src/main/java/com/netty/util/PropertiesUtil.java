@@ -20,7 +20,7 @@ public class PropertiesUtil {
 
     private static Properties prop;
 
-    public static synchronized Properties loadProperties() {
+    private static synchronized Properties loadProperties() {
         if (prop != null) {
             return prop;
         }
@@ -35,6 +35,8 @@ public class PropertiesUtil {
             logger.debug(e.getMessage());
         } catch (IOException e) {
             logger.debug(e.getMessage());
+        } catch (Exception e) {
+            logger.error(e.getMessage());
         } finally {
             if (in != null) {
                 try {
@@ -47,21 +49,20 @@ public class PropertiesUtil {
         return prop;
     }
 
+    public static String getProperty(String name) {
+        return loadProperties().getProperty(name);
+    }
 
-    public static String propertiesName() {
-        String env = "";
+
+    private static String propertiesName() {
+        String env;
         String active = System.getProperty("active");
-
-        if ("dev".equals(active) || Objects.isNull(active)) {
+        if (Objects.isNull(active)) {
             env = "dev.properties";
+            logger.warn("没有自定义配置，使用默认配置");
+        } else {
+            env = active + ".properties";
         }
-        if ("test".equals(active)) {
-            env = "test.properties";
-        }
-        if ("prod".equals(active)) {
-            env = "product.properties";
-        }
-
         return env;
     }
 }

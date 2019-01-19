@@ -17,7 +17,7 @@ public class MessageSendHandler extends BaseBusinessHandler {
         builder.setMessageType(ServerCommand.MessageType.SENDMESSAGE);
         builder.setMessage("hello");
         builder.setData(Any.getDefaultInstance());
-        ServerContextHolder.channelHolder.get("127.0.0.1:8099").writeAndFlush(builder);
+        ServerContextHolder.channelHolder.get("localhost").writeAndFlush(builder);
 
 
     }
