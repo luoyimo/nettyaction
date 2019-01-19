@@ -80,7 +80,7 @@ public class DistributedServerClient {
                             //登录到服务器端
                             ch.pipeline().addLast(HandlerName.LOGINAUTHREQ, new LoginAuthReqHandler(DistributedServerUtil.getServerAddress()));
                             //心跳检测
-                            heartBeatReqHandler = new HeartBeatServerReqHandler();
+                            heartBeatReqHandler = new HeartBeatServerReqHandler(DistributedServerUtil.getServerAddress());
                             ch.pipeline().addLast(HandlerName.HEARTBEAT, heartBeatReqHandler);
 
                             //后面这段代码可以删除 用于测试

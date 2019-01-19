@@ -23,6 +23,13 @@ public class HeartBeatServerReqHandler extends ChannelInboundHandlerAdapter {
 
     private volatile ScheduledFuture<?> heartBeat;
 
+
+    private String clinetId;
+
+    public HeartBeatServerReqHandler(String clientId) {
+        this.clinetId = clientId;
+    }
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ServerCommand.CommandModel comm = (ServerCommand.CommandModel) msg;
